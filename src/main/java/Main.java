@@ -1,5 +1,7 @@
+import java.util.Scanner;
+
 class Main {
-  public static void main(String[] args) {
+    public static void main(String[] args) {
 
         Queue<Integer> q = new Queue<>();
         q.insert(5);
@@ -25,6 +27,9 @@ class Main {
         System.out.printf("ex_2_1 : %s \n", ex_2_1(q2));
         System.out.printf("ex_2_5 : %s \n", ex_2_5(q, q1));
         System.out.printf("ex_2_6 : %s \n", ex_2_6(q1));
+        System.out.println(numInPlace(7720, 2));
+        radixSort(q1);
+        System.out.printf("Radix sort : %s", q1);
 
     }
 
@@ -165,5 +170,50 @@ class Main {
         if (count > max_count)
             max_sum = sum;
         return max_sum;
+    }
+
+    public static int max(Queue<Integer> q1) {
+        Queue<Integer> copy = ex_1(q1);
+        int num = 0;
+        if (!copy.isEmpty())
+            num = copy.remove();
+        while (!copy.isEmpty()) {
+            num = Math.max(copy.remove(), num);
+        }
+        return num;
+    }
+
+    public static void radixSort(Queue<Integer> q) {
+        if (q == null || q.isEmpty())
+            return;
+
+        @SuppressWarnings("unchecked")
+        Queue<Integer>[] buckets = (Queue<Integer>[]) new Queue[10];
+        for (int i = 0; i < 10; i++)
+            buckets[i] = new Queue<>();
+        int maxVal = max(q);
+        int maxDigits = digits(maxVal);
+        for (int d = 0; d < maxDigits; d++) {
+            while (!q.isEmpty()) {
+                int num = q.remove();
+                int digit = numInPlace(num, d);
+                buckets[digit].insert(num);
+            }
+            for (int i = 0; i < 10; i++) {
+                while (!buckets[i].isEmpty())
+                    q.insert(buckets[i].remove());
+            }
+        }
+    }
+
+    public static int digits(int x) {
+        return (int) Math.log10(x) + 1;
+    }
+
+    public static int numInPlace(int num, int i) {
+        String s = Integer.toString(num);
+        if (s.length() <= i)
+            return 0;
+        return Character.getNumericValue(s.charAt(s.length() - i - 1));
     }
 }
