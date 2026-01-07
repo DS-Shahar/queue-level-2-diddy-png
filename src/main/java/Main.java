@@ -25,12 +25,22 @@ class Main {
         q2.insert('a');
         q2.insert('c');
         System.out.printf("ex_2_1 : %s \n", ex_2_1(q2));
+        System.out.printf("Radix sort : %s \n", q1);
         System.out.printf("ex_2_5 : %s \n", ex_2_5(q, q1));
         System.out.printf("ex_2_6 : %s \n", ex_2_6(q1));
         System.out.println(numInPlace(7720, 2));
         radixSort(q1);
-        System.out.printf("Radix sort : %s", q1);
-
+        System.out.println("---------------------------------------------------");
+        Stack<Integer> s = new Stack<>();
+        s.push(1);
+        s.push(2);
+        s.push(3);
+        System.out.println(s);
+        ex_1s(s);
+        System.out.printf("ex_1s : %s \n", s);
+        System.out.println(q);
+        ex_2s(q);
+        System.out.printf("ex_2s : %s \n", q);
     }
 
     @SuppressWarnings("ConvertToTryWithResources")
@@ -215,5 +225,25 @@ class Main {
         if (s.length() <= i)
             return 0;
         return Character.getNumericValue(s.charAt(s.length() - i - 1));
+    }
+
+    public static <T> void ex_1s(Stack<T> s) {
+        Queue<T> q1 = new Queue<>();
+        while (!s.isEmpty()) {
+            q1.insert(s.pop());
+        }
+        while (!q1.isEmpty()) {
+            s.push(q1.remove());
+        }
+    }
+
+    public static <T> void ex_2s(Queue<T> q1) {
+        Stack<T> s = new Stack<>();
+        while (!q1.isEmpty()) {
+            s.push(q1.remove());
+        }
+        while (!s.isEmpty()) {
+            q1.insert(s.pop());
+        }
     }
 }
