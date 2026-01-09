@@ -18,19 +18,25 @@ class Main {
         System.out.printf("ex 4 : %s \n", ex_4(q1, q));
         System.out.printf("%s | %s\n", q1, q);
         System.out.printf("ex 5 : %s \n", ex_5(q1, 4));
-        System.out.println("----------------------------------------------------------------------------------");
+        System.out.println("----------------------------------Level 2------------------------------------------------");
         Queue<Character> q2 = new Queue<>();
         q2.insert('c');
         q2.insert('c');
         q2.insert('a');
         q2.insert('c');
+        Queue<String> q3 = new Queue<>();
+        q3.insert("abcd");
+        q3.insert("abc");
+        q3.insert("abcd");
+        q3.insert("ab");
         System.out.printf("ex_2_1 : %s \n", ex_2_1(q2));
+        System.out.printf("ex_2_2 : %s \n", ex_2_2(q3));
         System.out.printf("Radix sort : %s \n", q1);
         System.out.printf("ex_2_5 : %s \n", ex_2_5(q, q1));
         System.out.printf("ex_2_6 : %s \n", ex_2_6(q1));
         System.out.println(numInPlace(7720, 2));
         radixSort(q1);
-        System.out.println("---------------------------------------------------");
+        System.out.println("------------------------Stack---------------------------");
         Stack<Integer> s = new Stack<>();
         s.push(1);
         s.push(2);
@@ -118,7 +124,7 @@ class Main {
         return false;
     }
 
-    // ----------------------------------------------------------------------------------------------------------------------
+    // -------------------------------------------------------------------------------------------
     public static <T> Queue<Integer> ex_2_1(Queue<T> cq) { // O(n)-גודל הקלט זה אורך התור
         Queue<Integer> res = new Queue<>();
         Queue<T> copy = ex_1(cq);
@@ -138,6 +144,28 @@ class Main {
         }
         res.insert(count);
         return res;
+    }
+
+    public static <T> boolean isIn(Queue<T> q1, T x, int index) {
+        int i = 0;
+        Queue<T> copy = ex_1(q1);
+        while (!copy.isEmpty()) {
+            if (copy.remove().equals(x) && i != index)
+                return true;
+            i++;
+        }
+        return false;
+    }
+
+    public static <T> boolean ex_2_2(Queue<T> q1) {
+        int i = 0;
+        Queue<T> copy = ex_1(q1);
+        while (!copy.isEmpty()) {
+            if (isIn(q1, copy.remove(), i))
+                return true;
+            i++;
+        }
+        return false;
     }
 
     public static Queue<Integer> ex_2_5(Queue<Integer> q1, Queue<Integer> q2) {
@@ -227,23 +255,24 @@ class Main {
         return Character.getNumericValue(s.charAt(s.length() - i - 1));
     }
 
+    // -----------------------stack--------------------------
     public static <T> void ex_1s(Stack<T> s) {
         Queue<T> q1 = new Queue<>();
-        while (!s.isEmpty()) {
+        while (!s.isEmpty())
             q1.insert(s.pop());
-        }
-        while (!q1.isEmpty()) {
+
+        while (!q1.isEmpty())
             s.push(q1.remove());
-        }
+
     }
 
     public static <T> void ex_2s(Queue<T> q1) {
         Stack<T> s = new Stack<>();
-        while (!q1.isEmpty()) {
+        while (!q1.isEmpty())
             s.push(q1.remove());
-        }
-        while (!s.isEmpty()) {
+
+        while (!s.isEmpty())
             q1.insert(s.pop());
-        }
+
     }
 }
