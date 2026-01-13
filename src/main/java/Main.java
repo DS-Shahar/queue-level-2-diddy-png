@@ -36,6 +36,8 @@ class Main {
         System.out.printf("ex_2_6 : %s \n", ex_2_6(q1));
         System.out.println(numInPlace(7720, 2));
         radixSort(q1);
+        ex_2_3(q2);
+        System.out.printf("ex_2_3 : %s \n", q2);
         System.out.println("------------------------Stack---------------------------");
         Stack<Integer> s = new Stack<>();
         s.push(1);
@@ -124,6 +126,23 @@ class Main {
         return false;
     }
 
+    public static <T> void ex_6(Queue<T> q1, T value, int decision) {// decision is 1 or 0
+        // if decision ==0 then remove all its apearences
+        // if decision ==1 then remove all its apearences other than the first one
+        Queue<T> temp = new Queue<>();
+        int i = 0;
+        while (!q1.isEmpty()) {
+            T val = q1.remove();
+            if (!(val.equals(value) && i >= decision)) {
+                temp.insert(val);
+            }
+            if (val.equals(value))
+                i++;
+        }
+        while (!temp.isEmpty())
+            q1.insert(temp.remove());
+    }
+
     // -------------------------------------------------------------------------------------------
     public static <T> Queue<Integer> ex_2_1(Queue<T> cq) { // O(n)-גודל הקלט זה אורך התור
         Queue<Integer> res = new Queue<>();
@@ -166,6 +185,45 @@ class Main {
             i++;
         }
         return false;
+    }
+
+    public static <T> void ex_2_3(Queue<T> q1) {
+        Queue<T> copy = ex_1(q1);
+        while (!copy.isEmpty()) {
+            ex_6(q1, copy.remove(), 1);
+        }
+    }
+
+    public static void ex_2_4(Queue<Integer> q1) {
+        int size = 0;
+        Queue<Integer> copy = ex_1(q1);
+        while (!copy.isEmpty()) {
+            copy.remove();
+            size++;
+        }
+
+        for (int i = 0; i < size; i++) {
+            int min = Integer.MAX_VALUE;
+            int minIndex = -1;
+            Queue<Integer> temp = ex_1(q1);
+
+            for (int j = 0; j < size; j++) {
+                int val = temp.remove();
+                if (val < min) {
+                    min = val;
+                    minIndex = j;
+                }
+            }
+
+            temp = ex_1(q1);
+            for (int j = 0; j < minIndex; j++) {
+                q1.insert(temp.remove());
+            }
+            temp.remove();
+            while (!temp.isEmpty()) {
+                q1.insert(temp.remove());
+            }
+        }
     }
 
     public static Queue<Integer> ex_2_5(Queue<Integer> q1, Queue<Integer> q2) {
