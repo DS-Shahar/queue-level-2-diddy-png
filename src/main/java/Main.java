@@ -1,8 +1,11 @@
+import java.lang.reflect.Array;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 
 class Main {
     public static void main(String[] args) {
-
+        ArrayList<String> li = new ArrayList<>(List.of("ancs","nigger","sid","aviv"));
         Queue<Integer> q = new Queue<>();
         q.insert(5);
         q.insert(7);
@@ -12,7 +15,7 @@ class Main {
         System.out.println("Enter numbers for q1 (type -1 to stop):");
         Queue<Integer> q1 = createqueue();
         System.out.printf("%s | %s\n", q1, q);
-        System.out.printf("ex 1 : %s \n", ex_1(q));
+        System.out.printf("ex 1 :F %s \n", ex_1(q));
         System.out.printf("ex 2 : %s \n", ex_2(q));
         System.out.printf("ex 3 : %s \n", ex_3(q, 35));
         System.out.printf("ex 4 : %s \n", ex_4(q1, q));
@@ -49,6 +52,8 @@ class Main {
         System.out.println(q);
         ex_2s(q);
         System.out.printf("ex_2s : %s \n", q);
+        cc(li);
+        System.out.printf("Sum of nodes with two children : %s \n", n(new BinNode<>(new BinNode<>(1),2,new BinNode<>(3))));
     }
 
     @SuppressWarnings("ConvertToTryWithResources")
@@ -332,5 +337,20 @@ class Main {
         while (!s.isEmpty())
             q1.insert(s.pop());
 
+    }
+
+    public static void cc(ArrayList<String> l) {
+        l.stream()
+                .filter(p -> p.charAt(0) == 'a')
+                .map(String::toUpperCase)
+                .forEach(System.out::println);
+    }
+
+    public static int n(BinNode<Integer> t) {
+        if (t == null)
+            return 0;
+        if(t.hasLeft() && t.hasRight())
+            return t.getValue()+n(t.getLeft())+n(t.getRight());
+        return n(t.getLeft())+n(t.getRight());
     }
 }
