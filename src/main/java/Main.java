@@ -4,353 +4,145 @@ import java.util.List;
 import java.util.Scanner;
 
 class Main {
-    public static void main(String[] args) {
-        ArrayList<String> li = new ArrayList<>(List.of("ancs","nigger","sid","aviv"));
-        Queue<Integer> q = new Queue<>();
-        q.insert(5);
-        q.insert(7);
-        q.insert(8);
-        q.insert(9);
-        q.insert(10);
-        System.out.println("Enter numbers for q1 (type -1 to stop):");
-        Queue<Integer> q1 = createqueue();
-        System.out.printf("%s | %s\n", q1, q);
-        System.out.printf("ex 1 :F %s \n", ex_1(q));
-        System.out.printf("ex 2 : %s \n", ex_2(q));
-        System.out.printf("ex 3 : %s \n", ex_3(q, 35));
-        System.out.printf("ex 4 : %s \n", ex_4(q1, q));
-        System.out.printf("%s | %s\n", q1, q);
-        System.out.printf("ex 5 : %s \n", ex_5(q1, 4));
-        System.out.println("----------------------------------Level 2------------------------------------------------");
-        Queue<Character> q2 = new Queue<>();
-        q2.insert('c');
-        q2.insert('c');
-        q2.insert('a');
-        q2.insert('c');
-        Queue<String> q3 = new Queue<>();
-        q3.insert("abcd");
-        q3.insert("abc");
-        q3.insert("abcd");
-        q3.insert("ab");
-        System.out.printf("ex_2_1 : %s \n", ex_2_1(q2));
-        System.out.printf("ex_2_2 : %s \n", ex_2_2(q3));
-        System.out.printf("Radix sort : %s \n", q1);
-        System.out.printf("ex_2_5 : %s \n", ex_2_5(q, q1));
-        System.out.printf("ex_2_6 : %s \n", ex_2_6(q1));
-        System.out.println(numInPlace(7720, 2));
-        radixSort(q1);
-        ex_2_3(q2);
-        System.out.printf("ex_2_3 : %s \n", q2);
-        System.out.println("------------------------Stack---------------------------");
-        Stack<Integer> s = new Stack<>();
-        s.push(1);
-        s.push(2);
-        s.push(3);
-        System.out.println(s);
-        ex_1s(s);
-        System.out.printf("ex_1s : %s \n", s);
-        System.out.println(q);
-        ex_2s(q);
-        System.out.printf("ex_2s : %s \n", q);
-        cc(li);
-        System.out.printf("Sum of nodes with two children : %s \n", n(new BinNode<>(new BinNode<>(1),2,new BinNode<>(3))));
+public static void main(String[] args) {
+        BinNode<Integer> t = createSampleTree();
+        BinNode<Integer> t2 = createBigTree();
+        BinNode<Integer> t3 = createBigNonSearchTree();
+        t.display();
+        t2.display();
+        t3.display();
+        System.out.printf("ex_14:the tree has %s leaves\n", ex_14(t));
+        System.out.printf("ex_18:the tree t2 %s t\n", ex_18(t2, t2) ? "contains" : "does not contain");
+        System.out.printf("the positive numbers sum - the negative numbers sum = %s\n", ex_20(t3));
     }
 
-    @SuppressWarnings("ConvertToTryWithResources")
-    public static Queue<Integer> createqueue() {
-        Queue<Integer> q = new Queue<>();
-        Scanner rd = new Scanner(System.in);
+    public static BinNode<Integer> createSampleTree() {
+        // 1. Create the bottom-most layer (Level 4)
+        BinNode<Integer> deepLeaf1 = new BinNode<>(1); // Child for 2
+        BinNode<Integer> deepLeaf2 = new BinNode<>(6); // Left child for 7
+        BinNode<Integer> deepLeaf3 = new BinNode<>(8); // Right child for 7
 
-        if (rd.hasNextInt()) {
-            int x = rd.nextInt();
-            while (x != -1) {
-                q.insert(x);
-                x = rd.nextInt();
-            }
-        }
-        rd.close();
-        return q;
+        // 2. Create the middle layer (Level 3)
+        // Node 2: Has '1' as left child, no right child
+        BinNode<Integer> node2 = new BinNode<>(deepLeaf1, 2, null);
+
+        // Node 7: Has '6' and '8' as children
+        BinNode<Integer> node7 = new BinNode<>(deepLeaf2, 7, deepLeaf3);
+
+        // These remain leaves for now
+        BinNode<Integer> leaf12 = new BinNode<>(12);
+        BinNode<Integer> leaf20 = new BinNode<>(20);
+
+        // 3. Create the sub-parents (Level 2)
+        BinNode<Integer> subLeft = new BinNode<>(node2, 5, node7);
+        BinNode<Integer> subRight = new BinNode<>(leaf12, 15, leaf20);
+
+        // 4. Create the root (Level 1)
+        return new BinNode<>(subLeft, 10, subRight);
     }
 
-    public static <T> Queue<T> ex_1(Queue<T> q) {
-        Queue<T> co = new Queue<>();
-        Queue<T> te = new Queue<>();
-        while (!q.isEmpty()) {
-            T vl = q.remove();
-            co.insert(vl);
-            te.insert(vl);
-        }
-        while (!te.isEmpty())
-            q.insert(te.remove());
-        return co;
+    public static BinNode<Integer> createBigTree() {
+        BinNode<Integer> leaf1 = new BinNode<>(1);
+        BinNode<Integer> leaf3 = new BinNode<>(3);
+        BinNode<Integer> leaf6 = new BinNode<>(6);
+        BinNode<Integer> leaf8 = new BinNode<>(8);
+        BinNode<Integer> leaf30 = new BinNode<>(30);
+        BinNode<Integer> node2 = new BinNode<>(leaf1, 2, leaf3);
+        BinNode<Integer> node7 = new BinNode<>(leaf6, 7, leaf8);
+        BinNode<Integer> node25 = new BinNode<>(null, 25, leaf30);
+        BinNode<Integer> leaf12 = new BinNode<>(12);
+        BinNode<Integer> subLeft = new BinNode<>(node2, 5, node7);
+        BinNode<Integer> node20 = new BinNode<>(null, 20, node25);
+        BinNode<Integer> subRight = new BinNode<>(leaf12, 15, node20);
+        return new BinNode<>(subLeft, 10, subRight);
     }
 
-    public static double ex_2(Queue<Integer> q1) {
-        Queue<Integer> q2 = ex_1(q1);
-        double sum = 0;
-        double i = 0;
-        while (!q2.isEmpty()) {
-            sum += q2.remove();
-            i++;
-        }
-        if (i == 0)
-            return 0;
-        return sum / i;
+    public static BinNode<Integer> createBigNonSearchTree() {
+        // --- Step 1: Create new "Bad" Nodes (breaking BST rules) ---
+
+        // A negative number (-99).
+        // We will put this on the RIGHT of 20. (Error: Right child must be larger than
+        // parent)
+        BinNode<Integer> badRightChild = new BinNode<>(-99);
+
+        // A huge number (1000).
+        // We will put this on the LEFT of 2. (Error: Left child must be smaller than
+        // parent)
+        BinNode<Integer> badLeftChild = new BinNode<>(12);
+
+        // --- Step 2: Create the Original Leaves (with attached bad nodes) ---
+
+        // Original leaf '2' gets '1000' on its left
+        BinNode<Integer> node2 = new BinNode<>(badLeftChild, 2, null);
+
+        // Original leaf '20' gets '-99' on its right
+        BinNode<Integer> node20 = new BinNode<>(null, 20, badRightChild);
+
+        // These original leaves remain untouched
+        BinNode<Integer> node7 = new BinNode<>(7);
+        BinNode<Integer> node12 = new BinNode<>(12);
+
+        // --- Step 3: Rebuild the Original Parents ---
+
+        // Recreating the original '5' (Left subtree)
+        BinNode<Integer> subLeft = new BinNode<>(node2, 5, node7);
+
+        // Recreating the original '15' (Right subtree)
+        BinNode<Integer> subRight = new BinNode<>(node12, 15, node20);
+
+        // --- Step 4: The Original Root ---
+        return new BinNode<>(subLeft, 10, subRight);
     }
 
-    public static int ex_3(Queue<Integer> q1, int num) {
-        int x = 0;
-        Queue<Integer> q2 = ex_1(q1);
-        while (!q2.isEmpty()) {
-            if (num % q2.remove() == 0)
-                x++;
-        }
-        return x;
-    }
-
-    public static boolean ex_4(Queue<Integer> q1, Queue<Integer> q2) {
-        Queue<Integer> q3 = ex_1(q1);
-        while (!q3.isEmpty()) {
-            if (ex_3(q2, q3.remove()) == 0)
-                return false;
-        }
-        return true;
-    }
-
-    public static <T> boolean ex_5(Queue<T> q1, T x) {
-        Queue<T> q2 = ex_1(q1);
-        if (q2.isEmpty())
-            return false;
-        T prev = q2.remove();
-        while (!q2.isEmpty()) {
-            T now = q2.remove();
-            if (prev.equals(now) && now.equals(x))
-                return true;
-            prev = now;
-        }
-        return false;
-    }
-
-    public static <T> void ex_6(Queue<T> q1, T value, int decision) {// decision is 1 or 0
-        // if decision ==0 then remove all its apearences
-        // if decision ==1 then remove all its apearences other than the first one
-        Queue<T> temp = new Queue<>();
-        int i = 0;
-        while (!q1.isEmpty()) {
-            T val = q1.remove();
-            if (!(val.equals(value) && i >= decision)) {
-                temp.insert(val);
-            }
-            if (val.equals(value))
-                i++;
-        }
-        while (!temp.isEmpty())
-            q1.insert(temp.remove());
-    }
-
-    // -------------------------------------------------------------------------------------------
-    public static <T> Queue<Integer> ex_2_1(Queue<T> cq) { // O(n)-גודל הקלט זה אורך התור
-        Queue<Integer> res = new Queue<>();
-        Queue<T> copy = ex_1(cq);
-        if (copy.isEmpty())
-            return res;
-        T prev = copy.remove();
-        int count = 1;
-        while (!copy.isEmpty()) {
-            T now = copy.remove();
-            if (now == prev)
-                count++;
-            else {
-                prev = now;
-                res.insert(count);
-                count = 1;
-            }
-        }
-        res.insert(count);
-        return res;
-    }
-
-    public static <T> boolean isIn(Queue<T> q1, T x, int index) {
-        int i = 0;
-        Queue<T> copy = ex_1(q1);
-        while (!copy.isEmpty()) {
-            if (copy.remove().equals(x) && i != index)
-                return true;
-            i++;
-        }
-        return false;
-    }
-
-    public static <T> boolean ex_2_2(Queue<T> q1) {
-        int i = 0;
-        Queue<T> copy = ex_1(q1);
-        while (!copy.isEmpty()) {
-            if (isIn(q1, copy.remove(), i))
-                return true;
-            i++;
-        }
-        return false;
-    }
-
-    public static <T> void ex_2_3(Queue<T> q1) {
-        Queue<T> copy = ex_1(q1);
-        while (!copy.isEmpty()) {
-            ex_6(q1, copy.remove(), 1);
-        }
-    }
-
-    public static void ex_2_4(Queue<Integer> q1) {
-        int size = 0;
-        Queue<Integer> copy = ex_1(q1);
-        while (!copy.isEmpty()) {
-            copy.remove();
-            size++;
-        }
-
-        for (int i = 0; i < size; i++) {
-            int min = Integer.MAX_VALUE;
-            int minIndex = -1;
-            Queue<Integer> temp = ex_1(q1);
-
-            for (int j = 0; j < size; j++) {
-                int val = temp.remove();
-                if (val < min) {
-                    min = val;
-                    minIndex = j;
-                }
-            }
-
-            temp = ex_1(q1);
-            for (int j = 0; j < minIndex; j++) {
-                q1.insert(temp.remove());
-            }
-            temp.remove();
-            while (!temp.isEmpty()) {
-                q1.insert(temp.remove());
-            }
-        }
-    }
-
-    public static Queue<Integer> ex_2_5(Queue<Integer> q1, Queue<Integer> q2) {
-        Queue<Integer> copy = ex_1(q1);
-        Queue<Integer> copy2 = ex_1(q2);
-        Queue<Integer> res = new Queue<>();
-        while (!copy.isEmpty() && !copy2.isEmpty()) {
-            if (copy.head() <= copy2.head())
-                res.insert(copy.remove());
-            else
-                res.insert(copy2.remove());
-        }
-        while (!copy.isEmpty())
-            res.insert(copy.remove());
-        while (!copy2.isEmpty())
-            res.insert(copy2.remove());
-        return res;
-    }
-
-    public static int ex_2_6(Queue<Integer> q1) {
-        Queue<Integer> copy = ex_1(q1);
-        int count = 0;
-        int max_count = 0;
-        int sum = 0;
-        int max_sum = 0;
-        while (!copy.isEmpty()) {
-            int now = copy.remove();
-            if (now % 2 == 0) {
-                count++;
-                sum += now;
-            } else {
-                if (count > max_count) {
-                    max_count = count;
-                    max_sum = sum;
-                }
-                count = 0;
-                sum = 0;
-            }
-        }
-        if (count > max_count)
-            max_sum = sum;
-        return max_sum;
-    }
-
-    public static int max(Queue<Integer> q1) {
-        Queue<Integer> copy = ex_1(q1);
-        int num = 0;
-        if (!copy.isEmpty())
-            num = copy.remove();
-        while (!copy.isEmpty()) {
-            num = Math.max(copy.remove(), num);
-        }
-        return num;
-    }
-
-    public static void radixSort(Queue<Integer> q) {
-        if (q == null || q.isEmpty())
-            return;
-
-        @SuppressWarnings("unchecked")
-        Queue<Integer>[] buckets = (Queue<Integer>[]) new Queue[10];
-        for (int i = 0; i < 10; i++)
-            buckets[i] = new Queue<>();
-        int maxVal = max(q);
-        int maxDigits = digits(maxVal);
-        for (int d = 0; d < maxDigits; d++) {
-            while (!q.isEmpty()) {
-                int num = q.remove();
-                int digit = numInPlace(num, d);
-                buckets[digit].insert(num);
-            }
-            for (int i = 0; i < 10; i++) {
-                while (!buckets[i].isEmpty())
-                    q.insert(buckets[i].remove());
-            }
-        }
-    }
-
-    public static int digits(int x) {
-        return (int) Math.log10(x) + 1;
-    }
-
-    public static int numInPlace(int num, int i) {
-        String s = Integer.toString(num);
-        if (s.length() <= i)
-            return 0;
-        return Character.getNumericValue(s.charAt(s.length() - i - 1));
-    }
-
-    // -----------------------stack--------------------------
-    public static <T> void ex_1s(Stack<T> s) {
-        Queue<T> q1 = new Queue<>();
-        while (!s.isEmpty())
-            q1.insert(s.pop());
-
-        while (!q1.isEmpty())
-            s.push(q1.remove());
-
-    }
-
-    public static <T> void ex_2s(Queue<T> q1) {
-        Stack<T> s = new Stack<>();
-        while (!q1.isEmpty())
-            s.push(q1.remove());
-
-        while (!s.isEmpty())
-            q1.insert(s.pop());
-
-    }
-
-    public static void cc(ArrayList<String> l) {
-        l.stream()
-                .filter(p -> p.charAt(0) == 'a')
-                .map(String::toUpperCase)
-                .forEach(System.out::println);
-    }
-
-    public static int n(BinNode<Integer> t) {
+    public static <T> int ex_14(BinNode<T> t) {
         if (t == null)
             return 0;
-        if(t.hasLeft() && t.hasRight())
-            return t.getValue()+n(t.getLeft())+n(t.getRight());
-        return n(t.getLeft())+n(t.getRight());
+        if (t.hasLeft() && !t.hasRight())
+            return ex_14(t.getLeft());
+        if (!t.hasLeft() && t.hasRight())
+            return ex_14(t.getRight());
+        if (!t.hasLeft() && !t.hasRight())
+            return 1;
+        return ex_14(t.getLeft()) + ex_14(t.getRight());
+    }
+
+    private static boolean isIn(BinNode<Integer> t, int num) {
+        if (t == null)
+            return false;
+        if (t.getValue() == num)
+            return true;
+        if (t.hasLeft() && !t.hasRight())
+            return isIn(t.getLeft(), num);
+        if (!t.hasLeft() && t.hasRight())
+            return isIn(t.getRight(), num);
+        return isIn(t.getLeft(), num) || isIn(t.getRight(), num);
+    }
+
+    public static boolean ex_18(BinNode<Integer> t1, BinNode<Integer> t2) {
+        if (t2 == null)
+            return true;
+        if (!isIn(t1, t2.getValue()))
+            return false;
+        return ex_18(t1, t2.getLeft()) && ex_18(t1, t2.getRight());
+    }
+
+    public static int ex_20(BinNode<Integer> t) {
+        return posSum(t) - negSum(t);
+    }
+
+    private static int posSum(BinNode<Integer> t) {
+        if (t == null)
+            return 0;
+        if (t.getValue() > 0)
+            return t.getValue() + posSum(t.getLeft()) + posSum(t.getRight());
+        return posSum(t.getLeft()) + posSum(t.getRight());
+    }
+
+    private static int negSum(BinNode<Integer> t) {
+        if (t == null)
+            return 0;
+        if (t.getValue() < 0)
+            return -t.getValue() + negSum(t.getLeft()) + negSum(t.getRight());
+        return negSum(t.getLeft()) + negSum(t.getRight());
     }
 }
