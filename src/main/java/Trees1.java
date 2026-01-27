@@ -6,8 +6,6 @@ public class Trees1 {
         t.display();
         t2.display();
         t3.display();
-        cx(t);
-        System.out.printf("2 sons no leaves: %s\n", de(t));
         System.out.printf("ex_14:the tree has %s leaves\n", ex_14(t));
         System.out.printf("ex_18:the tree t2 %s t\n", ex_18(t2, t2) ? "contains" : "does not contain");
         System.out.printf("ex_20:the positive numbers sum - the negative numbers sum = %s\n", ex_20(t3));
@@ -97,26 +95,6 @@ public class Trees1 {
 
         // --- Step 4: The Original Root ---
         return new BinNode<>(subLeft, 10, subRight);
-    }
-
-    public static void cx(BinNode<Integer> t) {
-        if (t == null)
-            return;
-        cx(t.getLeft());
-        System.out.println(t.getValue());
-        cx(t.getRight());
-
-    }
-
-    public static boolean de(BinNode<Integer> t) {
-        if (t == null)
-            return true;
-        if (t.hasLeft() && !t.hasRight())
-            return de(t.getLeft());
-        if (!t.hasLeft() && t.hasRight())
-            return false;
-        return de(t.getLeft()) && de(t.getRight());
-
     }
 
     public static <T> int ex_14(BinNode<T> t) {
