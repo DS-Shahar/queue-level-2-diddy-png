@@ -8,7 +8,7 @@ public class Trees1 {
         t3.display();
         System.out.printf("ex_14:the tree has %s leaves\n", ex_14(t));
         System.out.printf("ex_18:the tree t2 %s t\n", ex_18(t2, t2) ? "contains" : "does not contain");
-        System.out.printf("ex_20:the positive numbers sum - the negative numbers sum = %s\n", ex_20(t3));
+        System.out.printf("ex_19:the positive numbers sum - the negative numbers sum = %s\n", ex_19(t3));
         System.out.print("ex_1:");
         printSome(t2);
         System.out.printf("\nhas %s evens without odd sons\n", sumEm(t2));
@@ -16,6 +16,7 @@ public class Trees1 {
         System.out.printf("%s is evens without odd sons\n", all(t2) ? "all of the tree " : "not all the tree");
         System.out.printf("%s a balanced tree\n", isBalanced(t) ? "is" : "is not");
         System.out.printf("tree height is : %s\n", height(t));
+        System.out.printf("ex_20: %s",ex_20(t,20));
 
     }
 
@@ -100,10 +101,6 @@ public class Trees1 {
     public static <T> int ex_14(BinNode<T> t) {
         if (t == null)
             return 0;
-        if (t.hasLeft() && !t.hasRight())
-            return ex_14(t.getLeft());
-        if (!t.hasLeft() && t.hasRight())
-            return ex_14(t.getRight());
         if (!t.hasLeft() && !t.hasRight())
             return 1;
         return ex_14(t.getLeft()) + ex_14(t.getRight());
@@ -114,10 +111,6 @@ public class Trees1 {
             return false;
         if (t.getValue() == num)
             return true;
-        if (t.hasLeft() && !t.hasRight())
-            return isIn(t.getLeft(), num);
-        if (!t.hasLeft() && t.hasRight())
-            return isIn(t.getRight(), num);
         return isIn(t.getLeft(), num) || isIn(t.getRight(), num);
     }
 
@@ -128,8 +121,7 @@ public class Trees1 {
             return false;
         return ex_18(t1, t2.getLeft()) && ex_18(t1, t2.getRight());
     }
-
-    public static int ex_20(BinNode<Integer> t) {
+    public static int ex_19(BinNode<Integer> t) {
         return posSum(t) - negSum(t);
     }
 
@@ -226,9 +218,32 @@ public class Trees1 {
         return isBalanced(t.getLeft()) && isBalanced(t.getRight());
     }
 
-    public static int height(BinNode<Integer> t) {
+    public static <T> int height(BinNode<T> t) {
+        if (t == null)
+            return -1;
+        return 1 + Math.max(height(t.getLeft()), height(t.getRight()));
+    }
+    public static boolean ex_20(){
+        return true;
+    }
+    public static int nodec(BinNode<Integer> t){
+        if (t==null)
+            return 0;
+        return 1+nodec(t.getLeft())+nodec(t.getRight());
+    }
+    public static boolean ex_20(BinNode<Integer> t,int n){
+        for(int i=1;i<=n;i++){
+            if(countisIn(t, i)!=1)
+                return false;
+        }
+        return true;
+    }
+    public static int countisIn(BinNode<Integer> t, int num) {
         if (t == null)
             return 0;
-        return 1 + Math.max(height(t.getLeft()), height(t.getRight()));
+        int c=0;
+        if (t.getValue() == num)
+            c=1;
+        return c+countisIn(t.getLeft(), num) + countisIn(t.getRight(), num);
     }
 }
