@@ -1,10 +1,5 @@
-import java.lang.reflect.Array;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Scanner;
-
-class Main {
-public static void main(String[] args) {
+public class Trees1 {
+    public static void main(String[] args) {
         BinNode<Integer> t = createSampleTree();
         BinNode<Integer> t2 = createBigTree();
         BinNode<Integer> t3 = createBigNonSearchTree();
@@ -13,7 +8,16 @@ public static void main(String[] args) {
         t3.display();
         System.out.printf("ex_14:the tree has %s leaves\n", ex_14(t));
         System.out.printf("ex_18:the tree t2 %s t\n", ex_18(t2, t2) ? "contains" : "does not contain");
-        System.out.printf("the positive numbers sum - the negative numbers sum = %s\n", ex_20(t3));
+        System.out.printf("ex_19:the positive numbers sum - the negative numbers sum = %s\n", ex_19(t3));
+        System.out.print("ex_1:");
+        printSome(t2);
+        System.out.printf("\nhas %s evens without odd sons\n", sumEm(t2));
+        System.out.printf("%s evens without odd sons\n", exists(t2) ? "contains" : "does not contain");
+        System.out.printf("%s is evens without odd sons\n", all(t2) ? "all of the tree " : "not all the tree");
+        System.out.printf("%s a balanced tree\n", isBalanced(t) ? "is" : "is not");
+        System.out.printf("tree height is : %s\n", height(t));
+        System.out.printf("ex_20: %s",ex_20(t,20));
+
     }
 
     public static BinNode<Integer> createSampleTree() {
@@ -53,7 +57,7 @@ public static void main(String[] args) {
         BinNode<Integer> leaf12 = new BinNode<>(12);
         BinNode<Integer> subLeft = new BinNode<>(node2, 5, node7);
         BinNode<Integer> node20 = new BinNode<>(null, 20, node25);
-        BinNode<Integer> subRight = new BinNode<>(leaf12, 15, node20);
+        BinNode<Integer> subRight = new BinNode<>(leaf12, 14, node20);
         return new BinNode<>(subLeft, 10, subRight);
     }
 
@@ -97,10 +101,6 @@ public static void main(String[] args) {
     public static <T> int ex_14(BinNode<T> t) {
         if (t == null)
             return 0;
-        if (t.hasLeft() && !t.hasRight())
-            return ex_14(t.getLeft());
-        if (!t.hasLeft() && t.hasRight())
-            return ex_14(t.getRight());
         if (!t.hasLeft() && !t.hasRight())
             return 1;
         return ex_14(t.getLeft()) + ex_14(t.getRight());
@@ -111,10 +111,6 @@ public static void main(String[] args) {
             return false;
         if (t.getValue() == num)
             return true;
-        if (t.hasLeft() && !t.hasRight())
-            return isIn(t.getLeft(), num);
-        if (!t.hasLeft() && t.hasRight())
-            return isIn(t.getRight(), num);
         return isIn(t.getLeft(), num) || isIn(t.getRight(), num);
     }
 
@@ -125,8 +121,7 @@ public static void main(String[] args) {
             return false;
         return ex_18(t1, t2.getLeft()) && ex_18(t1, t2.getRight());
     }
-
-    public static int ex_20(BinNode<Integer> t) {
+    public static int ex_19(BinNode<Integer> t) {
         return posSum(t) - negSum(t);
     }
 
@@ -144,5 +139,111 @@ public static void main(String[] args) {
         if (t.getValue() < 0)
             return -t.getValue() + negSum(t.getLeft()) + negSum(t.getRight());
         return negSum(t.getLeft()) + negSum(t.getRight());
+    }
+
+    public static void printSome(BinNode<Integer> t) {
+        if (t == null)
+            return;
+        if (t.getValue() % 2 == 0
+                && (t.hasLeft() && t.hasRight())
+                && (t.getLeft().getValue() % 2 == 0 && t.getRight().getValue() % 2 == 0)) {
+            System.out.print(t.getValue() + " ");
+        }
+        if (t.getValue() % 2 == 0
+                && (!t.hasLeft() && t.hasRight())
+                && (t.getRight().getValue() % 2 == 0))
+            System.out.print(t.getValue() + "");
+        if (t.getValue() % 2 == 0
+                && (t.hasLeft() && !t.hasRight())
+                && (t.getLeft().getValue() % 2 == 0))
+            System.out.print(t.getValue() + " ");
+        printSome(t.getLeft());
+        printSome(t.getRight());
+    }
+
+    public static int sumEm(BinNode<Integer> t) {
+        if (t == null)
+            return 0;
+        int c = 0;
+        if (t.getValue() % 2 == 0
+                && (t.hasLeft() && t.hasRight())
+                && (t.getLeft().getValue() % 2 == 0 && t.getRight().getValue() % 2 == 0))
+            c = 1;
+
+        if (t.getValue() % 2 == 0
+                && (!t.hasLeft() && t.hasRight())
+                && (t.getRight().getValue() % 2 == 0))
+            c = 1;
+        if (t.getValue() % 2 == 0
+                && (t.hasLeft() && !t.hasRight())
+                && (t.getLeft().getValue() % 2 == 0))
+            c = 1;
+        return sumEm(t.getLeft()) + sumEm(t.getRight()) + c;
+    }
+
+    public static boolean exists(BinNode<Integer> t) {
+        if (t == null)
+            return false;
+        if (t.getValue() % 2 == 0
+                && (t.hasLeft() && t.hasRight())
+                && (t.getLeft().getValue() % 2 == 0 && t.getRight().getValue() % 2 == 0))
+            return true;
+
+        if (t.getValue() % 2 == 0
+                && (!t.hasLeft() && t.hasRight())
+                && (t.getRight().getValue() % 2 == 0))
+            return true;
+        if (t.getValue() % 2 == 0
+                && (t.hasLeft() && !t.hasRight())
+                && (t.getLeft().getValue() % 2 == 0))
+            return true;
+        return exists(t.getLeft()) || exists(t.getRight());
+    }
+
+    public static boolean all(BinNode<Integer> t) {
+        if (t == null)
+            return true;
+        if (t.getValue() % 2 == 1)
+            return false;
+        return all(t.getLeft()) && all(t.getRight());
+    }
+
+    public static boolean isBalanced(BinNode<Integer> t) {
+        if (t == null)
+            return true;
+        int leftHeight = height(t.getLeft());
+        int rightHeight = height(t.getRight());
+        if (Math.abs(leftHeight - rightHeight) > 1)
+            return false;
+        return isBalanced(t.getLeft()) && isBalanced(t.getRight());
+    }
+
+    public static <T> int height(BinNode<T> t) {
+        if (t == null)
+            return -1;
+        return 1 + Math.max(height(t.getLeft()), height(t.getRight()));
+    }
+    public static boolean ex_20(){
+        return true;
+    }
+    public static int nodec(BinNode<Integer> t){
+        if (t==null)
+            return 0;
+        return 1+nodec(t.getLeft())+nodec(t.getRight());
+    }
+    public static boolean ex_20(BinNode<Integer> t,int n){
+        for(int i=1;i<=n;i++){
+            if(countisIn(t, i)!=1)
+                return false;
+        }
+        return true;
+    }
+    public static int countisIn(BinNode<Integer> t, int num) {
+        if (t == null)
+            return 0;
+        int c=0;
+        if (t.getValue() == num)
+            c=1;
+        return c+countisIn(t.getLeft(), num) + countisIn(t.getRight(), num);
     }
 }
